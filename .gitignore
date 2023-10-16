@@ -38,4 +38,6 @@ out/
 
 
 ### properties ###
-*.properties
+minipjtrepo/miniproject/src/main/resources/application-oauth.properties
+minipjtrepo/miniproject/src/main/resources/application.properties
+
