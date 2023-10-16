@@ -38,4 +38,4 @@ out/
 
 
 ### properties ###
-miniproject/src/main/resources/*.properties
+miniproject/**/*.properties
