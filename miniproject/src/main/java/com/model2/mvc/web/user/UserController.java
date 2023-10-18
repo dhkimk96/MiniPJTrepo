@@ -148,14 +148,15 @@ public class UserController {
         return "/user/checkDuplication";
     }
 
+    //@RequestMapping("/listUser.do")
     @RequestMapping( value="listUser" )
     public String listUser( @ModelAttribute Search search , Model model) throws Exception{
 
         System.out.println("/webapp/WEB-INF/view/user/listUser : GET / POST");
 
-        if(search.getCurrentPage() ==0 ){
-            search.setCurrentPage(1);
-        }
+//        if(search.getCurrentPage() ==0 ){
+//            search.setCurrentPage(1);
+//        }
         search.setPageSize(pageSize);
         if(search.getOrderBy() == null){
             search.setOrderBy("userId");
@@ -173,28 +174,27 @@ public class UserController {
         model.addAttribute("list", map.get("list"));
         model.addAttribute("resultPage", resultPage);
         model.addAttribute("search", search);
-        System.out.println("되나");
         return "/user/listUser";
     }
 
 
-//    @GetMapping(value = "oauth")
-//    public String oauthLogin(HttpSession session){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(authentication instanceof OAuth2AuthenticationToken){
-//            OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
-//            Map<String, Object> userMap = oAuth2AuthenticationToken.getPrincipal().getAttributes();
-//
-//
-//            User user = new User();
-//            user.setUserId((String)userMap.get("userId"));
-//            user.setUserName((String)userMap.get("name"));
-//            user.setRole((String)userMap.get("role"));
-//
-//            session.setAttribute("user", user);
-//            log.info(user);
-//        }
-//        return "redirect:/index";
-//    }
+    @GetMapping(value = "oauth")
+    public String oauthLogin(HttpSession session){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication instanceof OAuth2AuthenticationToken){
+            OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
+            Map<String, Object> userMap = oAuth2AuthenticationToken.getPrincipal().getAttributes();
+
+
+            User user = new User();
+            user.setUserId((String)userMap.get("userId"));
+            user.setUserName((String)userMap.get("name"));
+            user.setRole((String)userMap.get("role"));
+
+            session.setAttribute("user", user);
+            log.info(user);
+        }
+        return "redirect:/index";
+    }
 
 }

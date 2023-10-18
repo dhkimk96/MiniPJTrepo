@@ -1,225 +1,161 @@
-<%@ page contentType="text/html; charset=euc-kr" %>
-
-
-
-
-
-
-
-
-
+<%@ page contentType="text/html; charset=utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
-<title>»óÇ°¼öÁ¤</title>
+	<title>ìƒí’ˆë“±ë¡</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<script type="text/javascript" src="../../../javascript/calendar.js"></script>
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
-<!--
-function fncAddProduct(){
-	
-	var queryString = window.location.search;
-	var searchParams = new URLSearchParams(queryString);
-	var paramValue = searchParams.get("prodNo");
-	document.detailForm.action='/product/updateProduct?prodNo='+paramValue+'&menu=ok';
-	document.detailForm.submit();
-}
--->
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script type="text/javascript" src="../javascript/calendar.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 
-	function fncUpdateProduct() {
-		var prodName=$("input[name='prodName']").val();
-		var prodDetail=$("input[name='prodDetail']").val();
-		var manuDate=$("input[name='manuDate']").val();
-		var price=$("input[name='price']").val();
-	
-		
-		if(prodName == null || prodName.length<1){
-			alert("»óÇ°¸íÀº ¹İµå½Ã ÀÔ·ÂÇÏ¿©¾ß ÇÕ´Ï´Ù.");
-			return;
+
+	<!-- Bootstrap Dropdown Hover CSS -->
+	<link href="/css/animate.min.css" rel="stylesheet">
+	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+	<!-- Bootstrap Dropdown Hover JS -->
+	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+
+
+	<!-- jQuery UI toolTip ì‚¬ìš© CSS-->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<!-- jQuery UI toolTip ì‚¬ìš© JS-->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style>
+		body > div.container{
+			border: 3px solid #D6CDB7;
+			margin-top: 60px;
 		}
-		if(prodDetail == null || prodDetail.length<1){
-			alert("»óÇ°»ó¼¼Á¤º¸´Â ¹İµå½Ã ÀÔ·ÂÇÏ¿©¾ß ÇÕ´Ï´Ù.");
-			return;
+
+
+	</style>
+
+	<!--  ///////////////////////// JavaScript ////////////////////////// -->
+	<script type="text/javascript">
+		function fncAddProduct(){
+			//Form ìœ íš¨ì„± ê²€ì¦
+			var name = document.detailForm.prodName.value;
+			var detail = document.detailForm.prodDetail.value;
+			var manuDate = document.detailForm.manuDate.value;
+			var price = document.detailForm.price.value;
+
+			if(name == null || name.length<1){
+				alert("ìƒí’ˆëª…ì€ ë°˜ë“œì‹œ ì…ë ¥í•˜ì—¬ì•¼ í•©ë‹ˆë‹¤.");
+				return;
+			}
+			if(detail == null || detail.length<1){
+				alert("ìƒí’ˆìƒì„¸ì •ë³´ëŠ” ë°˜ë“œì‹œ ì…ë ¥í•˜ì—¬ì•¼ í•©ë‹ˆë‹¤.");
+				return;
+			}
+			if(manuDate == null || manuDate.length<1){
+				alert("ì œì¡°ì¼ìëŠ” ë°˜ë“œì‹œ ì…ë ¥í•˜ì…”ì•¼ í•©ë‹ˆë‹¤.");
+				return;
+			}
+			if(price == null || price.length<1){
+				alert("ê°€ê²©ì€ ë°˜ë“œì‹œ ì…ë ¥í•˜ì…”ì•¼ í•©ë‹ˆë‹¤.");
+				return;
+			}
+
+
+			$('form').attr('method','post').attr('enctype','multipart/form-data').attr('action','updateProduct?menu=manage').submit();
 		}
-		if(manuDate == null || manuDate.length<1){
-			alert("Á¦Á¶ÀÏÀÚ´Â ¹İµå½Ã ÀÔ·ÂÇÏ¼Å¾ß ÇÕ´Ï´Ù.");
-			return;
+
+		function resetData(){
+			document.detailForm.reset();
 		}
-		if(price == null || price.length<1){
-			alert("°¡°İÀº ¹İµå½Ã ÀÔ·ÂÇÏ¼Å¾ß ÇÕ´Ï´Ù.");
-			return;
-		}
-		var queryString = window.location.search;
-		var searchParams = new URLSearchParams(queryString);
-		var paramValue = searchParams.get("prodNo");
-		
-		$("form").attr("method" , "POST").attr("action" , "/product/updateProduct?prodNo="+paramValue+"&menu=ok").submit();
-	}
-	
-	$(function() {
-		//alert("1");
-		 $("td.ct_btn01:contains('¼öÁ¤')").on("click" , function() {
-			fncUpdateProduct();
-		});
-	});	
-	
-	$(function() {
-		 $( "td.ct_btn01:contains('Ãë¼Ò')" ).on("click" , function() {
-			 history.go(-1);
-		});
-	});
-</script>
+
+		$(function () {
+			$( "button.btn.btn-primary" ).on("click" , function() {
+				fncAddProduct();
+			});
+
+			$("ct_btn01:contains('ì·¨ì†Œ')").on('click',function(){
+				resetData();
+			})
+
+			$("ct_btn01:contains('ì·¨ì†Œ')").on('click',function(){
+				resetData();
+			})
+
+			//../product/addProductView.jsp
+		})
+
+	</script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<body>
 
-<form name="detailForm">
+<jsp:include page="../layout/toolbar.jsp" />
 
-<input type="hidden" name="prodNo" value=${product.prodNo}/>
 
-<table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">»óÇ°¼öÁ¤</td>
-					<td width="20%" align="right">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
+<div class="container">
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 13px;">
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			»óÇ°¸í <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">
-						<input 	type="text" name="prodName" class="ct_input_g" 
-										style="width: 100px; height: 19px" maxLength="20" value="${product.prodName}">
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			»óÇ°»ó¼¼Á¤º¸ <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input type="text" name="prodDetail" value="${product.prodDetail}" class="ct_input_g" 
-						style="width: 100px; height: 19px" maxLength="10"	minLength="6">
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			Á¦Á¶ÀÏÀÚ <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input type="text" readonly="readonly" name="manuDate" value="${product.manuDate.replace("-","")}"
-						class="ct_input_g" style="width: 100px; height: 19px" maxLength="10" minLength="6">&nbsp;
-						<img src="../../../images/ct_icon_date.gif" width="15" height="15"
-                             onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)" />
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			°¡°İ <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input type="text" name="price" value="${product.price}"
-						class="ct_input_g" style="width: 100px; height: 19px" maxLength="50"/>&nbsp;¿ø
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">»óÇ°ÀÌ¹ÌÁö</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input	type="text" name="fileName" class="ct_input_g" 
-						style="width: 200px; height: 19px" maxLength="13" value="${product.fileName}"/>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			Àç°í °³¼ö <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input type="text" name="stock" value="${empty product.stock ? '0' : product.stock}" class="ct_input_g" 
-						style="width: 100px; height: 19px" maxLength="10"	minLength="6">
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-</table>
+	<h1 class="bg-primary text-center">ìƒ í’ˆ ìˆ˜ ì •</h1>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
-		<td width="53%"></td>
-		<td align="right">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						¼öÁ¤
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-					<td width="30"></td>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						Ãë¼Ò
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-</form>
+	<!-- form Start /////////////////////////////////////-->
+	<form name="detailForm" class="form-horizontal">
+		<input type="hidden" name="prodNo" value="${product.prodNo}"/>
+		<div class="form-group">
+			<label for="prodName" class="col-sm-offset-1 col-sm-3 control-label">ìƒ í’ˆ ëª…</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="prodName" name="prodName" placeholder="ìƒ í’ˆ ëª…" value="${product.prodName }">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="prodDetail" class="col-sm-offset-1 col-sm-3 control-label">ìƒí’ˆ ìƒì„¸ ì •ë³´</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="prodDetail" name="prodDetail" placeholder="ìƒí’ˆ ìƒì„¸ ì •ë³´" value="${product.prodDetail }">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="manuDate" class="col-sm-offset-2 col-sm-2 control-label">ì œì¡° ì¼ì</label>
+			<div class="col-sm-4">
+				<input type="date" name="manuDate"  class="form-control"  id = "manuDate" value="${product.manuDate }">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">ê°€ê²©</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="price" name="price" placeholder="ìƒí’ˆê°€ê²©" value="${product.price }">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">ìˆ˜ëŸ‰</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="stock" name="stock" placeholder="ì…ê³ ìˆ˜ëŸ‰" value="${product.stock }"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="files" class="col-sm-offset-1 col-sm-3 control-label">ìƒí’ˆì´ë¯¸ì§€</label>
+			<div class="col-sm-4">
+				<input type="file"  multiple="multiple" id="files" name="files">
+			</div>
+			<input type="hidden" name = "fileName" value = "${product.fileName}"/>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-4  col-sm-4 text-center">
+				<button type="button" class="btn btn-primary"  >ìˆ˜ &nbsp;ì •</button>
+				<a class="btn btn-primary btn" href="#" role="button">ì·¨&nbsp;ì†Œ</a>
+			</div>
+		</div>
+	</form>
+	<!-- form Start /////////////////////////////////////-->
+
+</div>
+<!--  í™”ë©´êµ¬ì„± div end /////////////////////////////////////-->
 
 </body>
 </html>

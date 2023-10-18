@@ -15,6 +15,7 @@ java {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -63,6 +64,9 @@ dependencies {
 
     //oauth2 의존성
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // iamport 의존성
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 
 }
 

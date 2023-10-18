@@ -1,7 +1,6 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="com.model2.mvc.service.product.ProductService"%>
 <%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="java.util.*"  %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -255,6 +254,12 @@
 
 	<div class="page-header text-info">
 		<h3>상품 목록 조회</h3>
+	</div>
+
+	<div class="col-md-6 text-left">
+		<p class="text-primary">
+			전체  ${resultPage.totalCount } 건수, 현재 ${resultPage.currentPage +1}  페이지
+		</p>
 	</div>
 
 	<div class="row">

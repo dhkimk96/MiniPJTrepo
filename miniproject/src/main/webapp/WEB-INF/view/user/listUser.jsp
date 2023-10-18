@@ -108,6 +108,36 @@
 
 			});
 
+			$(  "td:nth-child(5) > i" ).on("click" , function() {
+
+				var userId = $(this).next().val();
+
+				$.ajax(
+						{
+							url : "/user/json/getUser/"+userId ,
+							method : "GET" ,
+							dataType : "json" ,
+							headers : {
+								"Accept" : "application/json",
+								"Content-Type" : "application/json"
+							},
+							success : function(JSONData , status) {
+
+								var displayValue = "<h6>"
+										+"아이디 : "+JSONData.userId+"<br/>"
+										+"이  름 : "+JSONData.userName+"<br/>"
+										+"이메일 : "+JSONData.email+"<br/>"
+										+"ROLE : "+JSONData.role+"<br/>"
+										+"등록일 : "+JSONData.regDateString+"<br/>"
+										+"</h6>";
+								$("h6").remove();
+								$( "#"+userId+"" ).html(displayValue);
+							}
+						});
+				////////////////////////////////////////////////////////////////////////////////////////////
+
+			});
+
 			//==> userId LINK Event End User 에게 보일수 있도록
 			$( ".ct_list_pop td:nth-child(3)" ).css("color" , "red");
 			$("h7").css("color" , "red");
@@ -138,7 +168,7 @@
 
 		<div class="col-md-6 text-left">
 			<p class="text-primary">
-				전체  ${resultPage.totalCount } 건수, 현재 ${resultPage.currentPage}  페이지
+				전체  ${resultPage.totalCount } 건수, 현재 ${resultPage.currentPage +1}  페이지
 			</p>
 		</div>
 
@@ -172,7 +202,11 @@
 
 	<!--  table Start /////////////////////////////////////-->
 	<table class="table table-hover table-striped" >
-
+		<tr>
+			<td colspan="11" >
+				전체  ${resultPage.totalCount } 건수, 현재 ${resultPage.currentPage}  페이지
+			</td>
+		</tr>
 		<thead>
 		<tr>
 			<th align="center">No</th>

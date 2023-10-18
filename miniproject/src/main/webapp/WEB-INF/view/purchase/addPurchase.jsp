@@ -1,84 +1,152 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<%@ page import="com.model2.mvc.service.domain.Purchase" %>
+<%@ page contentType="text/html; charset=utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page pageEncoding="utf-8"%>
 
 
+<!DOCTYPE html>
 
+<html lang="ko">
 
-
-<html>
 <head>
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript">
+	<meta charset="utf-8">
 
+	<!-- ì°¸ì¡° : http://getbootstrap.com/css/   ì°¸ì¡° -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+
+	<!-- Bootstrap Dropdown Hover CSS -->
+	<link href="/css/animate.min.css" rel="stylesheet">
+	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+
+	<!-- Bootstrap Dropdown Hover JS -->
+	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+
+
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style>
+		body {
+			padding-top : 50px;
+		}
+	</style>
+
+	<!--  ///////////////////////// JavaScript ////////////////////////// -->
+	<script type="text/javascript">
+		window.addEventListener('beforeunload', (event)=>{
+			event.preventDefault();
+
+		});
+
+		//============= íšŒì›ì •ë³´ìˆ˜ì • Event  ì²˜ë¦¬ =============
 		$(function() {
-			$( "td.ct_btn01:contains('È®ÀÎ')" ).on("click" , function() {
-				self.location = "/product/listProduct?menu=search";
+			//==> DOM Object GET 3ê°€ì§€ ë°©ë²• ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$( "button" ).on("click" , function() {
+				$(self.location).attr("href","../product/listProduct?menu=search");
 			});
-		});	
-	
+		});
+
 
 	</script>
 
-<title>Insert title here</title>
 </head>
 
 <body>
 
-<form name="updatePurchase">
+<!-- ToolBar Start /////////////////////////////////////-->
+<jsp:include page="../layout/toolbar.jsp" />
+<!-- ToolBar End /////////////////////////////////////-->
 
-´ÙÀ½°ú °°ÀÌ ±¸¸Å°¡ µÇ¾ú½À´Ï´Ù.
+<!--  í™”ë©´êµ¬ì„± div Start /////////////////////////////////////-->
+<div class="container">
 
-<table border=1>
-	<tr>
-		<td>¹°Ç°¹øÈ£</td>
-		<td>${purchase.purchaseProd.prodNo}</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>±¸¸ÅÀÚ¾ÆÀÌµğ</td>
-		<td>${purchase.buyer.userId}</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>±¸¸Å¹æ¹ı</td>
-		<td>
-		
-			${purchase.paymentOption }
-		
-		</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>±¸¸ÅÀÚÀÌ¸§</td>
-		<td>${purchase.receiverName }</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>±¸¸ÅÀÚ¿¬¶ôÃ³</td>
-		<td>${purchase.receiverPhone }</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>±¸¸ÅÀÚÁÖ¼Ò</td>
-		<td>${purchase.divyAddr }</td>
-		<td></td>
-	</tr>
-		<tr>
-		<td>±¸¸Å¿äÃ»»çÇ×</td>
-		<td>${purchase.divyRequest }</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>¹è¼ÛÈñ¸ÁÀÏÀÚ</td>
-		<td>${purchase.divyDate }</td>
-		<td></td>
-	</tr>
-	<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-		È®ÀÎ
-	</td>
-</table>
-</form>
+	<div class="page-header">
+		<h3 class=" text-info">êµ¬ë§¤ì •ë³´ì¡°íšŒ</h3>
+		<h5 class="text-muted">êµ¬ë§¤ ì •ë³´ <strong class="text-danger">ì¡°íšŒ í˜ì´ì§€ </strong>ì…ë‹ˆë‹¤.</h5>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2"><strong>ë¬¼ í’ˆ ë²ˆ í˜¸</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.purchaseProd.prodNo}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2 "><strong>êµ¬ë§¤ì ì•„ì´ë””</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.buyer.userId}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2 "><strong>êµ¬ë§¤ë°©ë²•</strong></div>
+		<c:if test = "${purchase.paymentOption eq '1' }" >
+			<div class="col-xs-8 col-md-4">í˜„ê¸ˆêµ¬ë§¤</div>
+		</c:if>
+		<c:if test = "${purchase.paymentOption eq '2' }" >
+			<div class="col-xs-8 col-md-4">ì‹ ìš©êµ¬ë§¤</div>
+		</c:if>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2 "><strong>êµ¬ë§¤ìˆ˜ëŸ‰</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.quantity}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2"><strong>êµ¬ë§¤ì ì´ë¦„</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.receiverName}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2 "><strong>êµ¬ë§¤ì ì—°ë½ì²˜</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.receiverPhone}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2 "><strong>êµ¬ë§¤ì ì£¼ì†Œ</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.divyAddr}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2 "><strong>êµ¬ë§¤ì ìš”ì²­ì‚¬í•­</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.divyRequest}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-xs-4 col-md-2 "><strong>ë°°ì†¡ í¬ë§ì¼ì</strong></div>
+		<div class="col-xs-8 col-md-4">${purchase.divyDate}</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-md-12 text-center ">
+			<button type="button" class="btn btn-primary">ìƒí’ˆ ëª©ë¡ ì´ë™</button>
+		</div>
+	</div>
+
+	<br/>
+
+</div>
+<!--  í™”ë©´êµ¬ì„± div Start /////////////////////////////////////-->
 
 </body>
+
 </html>

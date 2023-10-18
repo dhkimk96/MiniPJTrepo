@@ -22,6 +22,9 @@
 	<!-- Bootstrap Dropdown Hover JS -->
 	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 
+
+
+
 	<!--  ///////////////////////// CSS ////////////////////////// -->
 	<style>
 		body {
@@ -31,7 +34,6 @@
 
 	<!--  ///////////////////////// JavaScript ////////////////////////// -->
 	<script type="text/javascript">
-		<!--
 		function fncUpdateProduct(){
 			//Form 유효성 검증
 			var name = document.detailForm.prodName.value;
@@ -64,8 +66,6 @@
 		function resetData(){
 			$('form').reset();
 		}
-		-->
-		//attr('enctype','multipart/form-data');
 		$(function () {
 
 			$('#addCart').on('click',function(){
@@ -98,6 +98,9 @@
 				history.go(-1)
 			});
 		})
+
+
+
 	</script>
 </head>
 
@@ -190,7 +193,7 @@
 			</c:if>
 
 			<c:if test="${product.stock <= 0}">
-				<div class="col-xs-8 col-md-4">품&nbsp;&nbsp;절</div>
+				<div class="col-xs-8 col-md-4">현재 남은 재고가 없습니다.</div>
 			</c:if>
 
 		</div>

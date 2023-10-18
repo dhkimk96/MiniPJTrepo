@@ -33,8 +33,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId).map(userMapper::userEntityToUser).orElse(null);
     }
 
-    @Override
-    public Map<String , Object> getUserList(Search search) throws Exception {
+    public Map<String , Object > getUserList(Search search) throws Exception {
         Sort sort = Sort.by(search.getOrderBy());
         Pageable pageable = PageRequest.of(search.getCurrentPage(), search.getPageSize(), sort);
         Page<UserEntity> page;
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("list", page.map(userMapper::userEntityToUser).toList());
-        map.put("totalcount", page.getTotalPages());
+        map.put("totalCount", page.getTotalPages());
         return map;
     }
 
