@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("list", page.map(productMapper::productEntityToProduct).toList());
-        map.put("count", page.getTotalPages());
+        map.put("totalCount", page.getTotalPages());
         return map;
     }
 

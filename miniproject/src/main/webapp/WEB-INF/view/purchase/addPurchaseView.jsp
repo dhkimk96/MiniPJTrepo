@@ -1,252 +1,236 @@
-<%@ page contentType="text/html; charset=euc-kr" %>
-
-
-
+<%@ page contentType="text/html; charset=utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
+	<title>ìƒí’ˆêµ¬ë§¤</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Insert title here</title>
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../../javascript/calendar.js"></script>
-
-<script type="text/javascript">
-
-
-$(function() {
-	//alert("1");
-	$("td.ct_btn01:contains('±¸¸Å')").on("click" , function() {
-		$("form").attr("method" , "POST").attr("action" , "/purchase/addPurchase").submit();
-	});
-	 
-	$("td.ct_btn01:contains('Ãë¼Ò')").on("click" , function() {
-		history.go(-1);
-	});
-});	
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script type="text/javascript" src="../javascript/calendar.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 
 
+	<!-- Bootstrap Dropdown Hover CSS -->
+	<link href="/css/animate.min.css" rel="stylesheet">
+	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+	<!-- Bootstrap Dropdown Hover JS -->
+	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 
 
-</script>
+	<!-- jQuery UI toolTip ì‚¬ìš© CSS-->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<!-- jQuery UI toolTip ì‚¬ìš© JS-->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<!-- imaport ê²°ì œ js -->
+	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style>
+		body > div.container{
+			border: 3px solid #D6CDB7;
+			margin-top: 60px;
+		}
+
+
+	</style>
+
+	<!--  ///////////////////////// JavaScript ////////////////////////// -->
+	<script type="text/javascript">
+
+		function fncAddPurchase(prodNo) {
+			document.getElementById("prodNo").value = prodNo
+			document.addPurchase.submit();
+		}
+
+		function resetData(){
+			document.detailForm.reset();
+		}
+
+
+		$(function () {
+			$("button.btn.btn-primary:contains('êµ¬ ë§¤')").on("click" , function() {
+
+				requestPay();
+
+				<%--$('#prodNo').val('${param.prodNo}');--%>
+				<%--$('form').attr('method','post').attr('action','addPurchase').submit();--%>
+			});
+
+			$("button.btn.btn-primary:contains('ë’¤ ë¡œ')").on('click',function(){
+				history.go(-1);
+			})
+
+			//../product/addProductView.jsp
+		})
+
+		function requestPay() {
+
+			//IMP ê°ì²´ ì´ˆê¸°í™”
+			var IMP = window.IMP;
+			IMP.init("imp23633508");
+
+			// êµ¬ë§¤ UID ìƒì„±í•˜ê¸° ìœ„í•¨
+			var today = new Date();
+			var hours = today.getHours(); // ì‹œ
+			var minutes = today.getMinutes();  // ë¶„
+			var seconds = today.getSeconds();  // ì´ˆ
+			var milliseconds = today.getMilliseconds();
+			var makeMerchantUid = hours +  minutes + seconds + milliseconds;
+
+			// var	buyer_postcode = "01181";
+
+			alert(prodName);
+
+			IMP.request_pay({
+				pg: "kcp.A52CY",
+				pay_method: "card",
+				merchant_uid: "IMP"+makeMerchantUid,  // ì£¼ë¬¸ë²ˆí˜¸
+				name: $("#prodName").text().trim(),
+				amount: $("#price").text().trim(),                         // ìˆ«ì íƒ€ì…
+				// buyer_email:$("#price").text().trim(),
+				buyer_name: $("#receiverName").text().trim(),
+				buyer_tel: $("#receiverPhone").text().trim(),
+				buyer_addr: $("#divyAddr").text().trim(),
+				// buyer_postcode: buyer_postcode
+			}, function (rsp) { // callback
+				// rsp.imp_uid ê°’ìœ¼ë¡œ ê²°ì œ ë‹¨ê±´ì¡°íšŒ APIë¥¼ í˜¸ì¶œí•˜ì—¬ ê²°ì œê²°ê³¼ë¥¼ íŒë‹¨í•©ë‹ˆë‹¤.
+				if (rsp.success) {
+					var msg = "ê²°ì œê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
+
+				} else {
+					console.log(rsp);
+				}
+			});
+		}
+
+
+
+
+	</script>
 </head>
 
 <body>
 
-<form name="addPurchase">
+<jsp:include page="../layout/toolbar.jsp" />
 
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37">
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">»óÇ°»ó¼¼Á¶È¸</td>
-					<td width="20%" align="right">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
 
-<input type="hidden" name="prodNo" value="${product.prodNo}" />
+<div class="container">
 
-<table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="300" class="ct_write">
-			»óÇ°¹øÈ£ <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01" width="299">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">${product.prodNo}</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			»óÇ°¸í <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${product.prodName}</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			»óÇ°»ó¼¼Á¤º¸ <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${product.prodDetail}</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">Á¦Á¶ÀÏÀÚ</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${product.manuDate}</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">°¡°İ</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${product.price}</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">µî·ÏÀÏÀÚ</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${product.regDate}</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			±¸¸ÅÀÚ¾ÆÀÌµğ <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${user.userId}</td>
-		<input type="hidden" name="userId" value="${user.userId}" />
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">±¸¸Å¹æ¹ı</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<select 	name="paymentOption"		class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20">
-				<option value="1" selected="selected">Çö±İ±¸¸Å</option>
-				<option value="2">½Å¿ë±¸¸Å</option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">±¸¸ÅÀÚÀÌ¸§</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input type="text" name="receiverName" 	class="ct_input_g" 
-						style="width: 100px; height: 19px" maxLength="20"/>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">±¸¸ÅÀÚ¿¬¶ôÃ³</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input 	type="text" name="receiverPhone" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20"/>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">±¸¸ÅÀÚÁÖ¼Ò</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input 	type="text" name="divyAddr" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20"/>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">±¸¸Å¿äÃ»»çÇ×</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input		type="text" name="divyRequest" 	class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" />
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">Àç°í</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input		type="text" name="stock" 	class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" />
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">¹è¼ÛÈñ¸ÁÀÏÀÚ</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td width="200" class="ct_write01">
-			<input 	type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20"/>
-			<img src="../../../images/ct_icon_date.gif" width="15" height="15"
-                 onclick="show_calendar('document.addPurchase.divyDate', document.addPurchase.divyDate.value)"/>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-</table>
+	<h1 class="bg-primary text-center">êµ¬ ë§¤ ì • ë³´ ì… ë ¥</h1>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
-	<tr>
-		<td width="53%"></td>
-		<td align="center">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						±¸¸Å
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-					<td width="30"></td>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						Ãë¼Ò
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-</form>
+	<!-- form Start /////////////////////////////////////-->
+	<form name="detailForm" class="form-horizontal">
+
+		<div class="form-group">
+			<input type = "hidden" name = "prodNo" id = "prodNo" />
+			<label for="prodName" class="col-sm-offset-1 col-sm-3 control-label">ìƒ í’ˆ ëª…</label>
+			<div class="col-sm-4" id="prodName">
+				${product.prodName}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="prodDetail" class="col-sm-offset-1 col-sm-3 control-label">ìƒí’ˆ ìƒì„¸ ì •ë³´</label>
+			<div class="col-sm-4" id="prodDetail">
+				${product.prodDetail}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="manuDate" class="col-sm-offset-2 col-sm-2 control-label">ì œì¡° ì¼ì</label>
+			<div class="col-sm-4" id="manuDate">
+				${product.manuDate}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">ê°€ê²©</label>
+			<div class="col-sm-4" id="price">
+				${product.price}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">êµ¬ë§¤ìˆ˜ëŸ‰</label>
+			<div class="col-sm-4">
+				<select name="quantity" class="form-control" id="quantity">
+					<c:forEach var="i" begin = "1" end = "${product.stock }" >
+						<option value="${i }"  ${(quantity == i)?"selected":"" }  >${i }</option>
+					</c:forEach>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">êµ¬ë§¤ì ì•„ì´ë””</label>
+			<div class="col-sm-4" id="userId">
+				${user.userId}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">êµ¬ë§¤ë°©ë²•</label>
+			<div class="col-sm-4">
+				<select 	name="paymentOption" class="form-control" id="paymentOption" >
+					<option value="1" selected="selected">í˜„ê¸ˆêµ¬ë§¤</option>
+					<option value="2">ì‹ ìš©êµ¬ë§¤</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">êµ¬ë§¤ìì´ë¦„</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="receiverName" name="receiverName" placeholder="êµ¬ë§¤ìì´ë¦„"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">êµ¬ë§¤ìì—°ë½ì²˜</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="receiverPhone" name="receiverPhone" placeholder="êµ¬ë§¤ìì—°ë½ì²˜"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">êµ¬ë§¤ìì£¼ì†Œ</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="divyAddr" name="divyAddr" placeholder="êµ¬ë§¤ìì£¼ì†Œ"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">êµ¬ë§¤ìš”ì²­ì‚¬í•­</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="divyRequest" name="divyRequest" placeholder="êµ¬ë§¤ìš”ì²­ì‚¬í•­"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="manuDate" class="col-sm-offset-2 col-sm-2 control-label">ë°°ì†¡í¬ë§ì¼ì</label>
+			<div class="col-sm-4">
+				<input type="date" name="divyDate"  class="form-control"  id = "divyDate"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-4  col-sm-4 text-center">
+				<button type="button" class="btn btn-primary"  >êµ¬ ë§¤</button>
+				<button type="button" class="btn btn-default"  >ë’¤ ë¡œ</button>
+			</div>
+		</div>
+
+	</form>
+	<!-- form Start /////////////////////////////////////-->
+
+</div>
+<!--  í™”ë©´êµ¬ì„± div end /////////////////////////////////////-->
 
 </body>
 </html>

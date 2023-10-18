@@ -91,7 +91,7 @@ public class ProductController {
         String[] fileNames = product.getFileName().split(",");
         model.addAttribute("fileNames", fileNames);
 
-        return "/product/addProduct";
+        return "/product/getProductView";
     }
 
     @RequestMapping(value="getProduct")
@@ -123,23 +123,22 @@ public class ProductController {
     }
 
     @UserAuthorize
-    @RequestMapping(value = "listProduct")
-    public String listProduct( @ModelAttribute("search") Search search , Model model) throws Exception{
+    @RequestMapping(value="listProduct")
+    public String listProduct( @ModelAttribute("search") Search search , @RequestParam("menu") String menu, Model model ) throws Exception{
 
-        System.out.println("/product/listProduct : GET / POST");
+        System.out.println("/listProduct");
 
         String orderBy = search.getOrderBy();
-
         if(orderBy == null || orderBy.equals("")) {
             search.setOrderBy("prodNo");
         }
-        if(search.getCurrentPage() == 0) {
-            search.setCurrentPage(1);
-        }
+//        if(search.getCurrentPage() == 0) {
+//            search.setCurrentPage(0);
+//        }
         int startRowNum = search.getCurrentPage() * pageSize - pageSize+1;
         int endRowNum = startRowNum + pageSize - 1;
 
-        System.out.println("startRowNum :: " + startRowNum + "endRowNum:: " + endRowNum);
+        System.out.println("startRowNum :: " + startRowNum + "\nendRowNum:: " + endRowNum);
 
         search.setStartRowNum(startRowNum);
         search.setEndRowNum(endRowNum);
@@ -153,11 +152,11 @@ public class ProductController {
 
         //Business Logic
 
-        Page page = new Page( search.getCurrentPage(), ((Integer)map.get("count")).intValue(), pageUnit, pageSize);
-        model.addAttribute("map", map);
-        model.addAttribute("page", page);
-        model.addAttribute("search", search);
-
+        Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+        model.addAttribute("list", map.get("list"));
+        model.addAttribute("resultPage", resultPage);
+        model.addAttribute("menu", menu);
+        // Model 과 View 연결
         return "/product/listProductView";
     }
 
